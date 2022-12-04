@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(dtoUser.getPassword()));
 		user.setFirstName(dtoUser.getFirstName());
 		user.setLastName(dtoUser.getLastName());
+		user.setAbout(dtoUser.getAbout());
 
 		user.setRoles(Arrays.asList(roleRepository.findRoleByName("ROLE_FULL_USER")));
 
@@ -102,6 +103,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(dtoUser.getPassword()));
 		user.setFirstName(dtoUser.getFirstName());
 		user.setLastName(dtoUser.getLastName());
+		user.setAbout(dtoUser.getAbout());
 
 		userRepository.save(user);
 	}
@@ -110,13 +112,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
 		User user = userRepository.findUserByLogin(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
-		return new CustomUserDetails(user.getLogin(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+		return new CustomUserDetails(user.getLogin(), user.getPassword(), mapRolesToAuthorities(user.getRoles()),
+				user.getFirstName(), user.getLastName(), user.getAbout());
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

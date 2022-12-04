@@ -14,23 +14,25 @@ import javax.validation.constraints.Size;
 public class DtoUser {
 
 	@NotNull(message = "is required")
-	@Size(min = 3, message = "has to be at least 3 characters/digit long")
+	@Size(min = 3, max = 30, message = "has to be at least 3 characters/digit long")
 	private String login;
 
 	@NotNull(message = "is required")
-	@Size(min = 5, message = "has to be at least 5 characters/digit long")
+	@Size(min = 5, max = 50, message = "has to be at least 5 characters/digit long")
 	private String password;
 	
 	@NotNull(message = "is required")
-	@Size(min = 5, message = "has to be at least 5 characters/digit long")
+	@Size(min = 5, max = 50, message = "has to be at least 5 characters/digit long")
 	private String matchingPassword;
 
-	@Pattern(regexp = "^[A-Z][A-Za-z]{2,19}", message = "first letter has to be uppercase, length 3-20 letters ")
+	@Pattern(regexp = "^[A-Z][A-Za-z]{2,39}", message = "first letter has to be uppercase, length 3-40 letters ")
 	private String firstName;
 
-	@Pattern(regexp = "^[A-Z][A-Za-z]{2,49}", message = "first letter has to be uppercase, length 3-50 letters ")
+	@Pattern(regexp = "^[A-Z][A-Za-z]{2,39}", message = "first letter has to be uppercase, length 3-40 letters ")
 	private String lastName;
 
+	@Size(max = 1000)
+	private String about;
 
 	public DtoUser() {
 
@@ -76,4 +78,11 @@ public class DtoUser {
 		this.lastName = lastName;
 	}
 
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
 }

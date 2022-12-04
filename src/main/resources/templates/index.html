@@ -28,17 +28,17 @@
                     <div sec:authorize="hasRole('ROLE_ADMIN')">
 
                         <li>
-                            <a class="nav-link" th:href="@{/admin/list}">Admin Panel</a>
+                            <a class="nav-link" th:href="@{/admin/panel}">Admin Panel</a>
                         </li>
 
                     </div>
-                    <div sec:authorize="hasRole('ROLE_FULL_USER')">
+<!--                    <div sec:authorize="hasRole('ROLE_FULL_USER')">-->
 
-                        <li>
-                            <a class="nav-link" th:href="@{/info/list}">Information Panel</a>
-                        </li>
+<!--                        <li>-->
+<!--                            <a class="nav-link" th:href="@{/info/list}">Information Panel</a>-->
+<!--                        </li>-->
 
-                    </div>
+<!--                    </div>-->
                 </ul>
             </div>
             <div class="mx-auto order-0">
