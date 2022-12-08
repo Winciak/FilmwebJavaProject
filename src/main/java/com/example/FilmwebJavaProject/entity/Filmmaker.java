@@ -1,6 +1,10 @@
 package com.example.FilmwebJavaProject.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -14,18 +18,24 @@ public class Filmmaker {
     @Column(name = "id_filmmaker", nullable = false)
     private int id;
 
+    @NotEmpty(message = "is required")
     @Column(name="first_name")
     private String firstName;
 
+    @NotEmpty(message = "is required")
     @Column(name="last_name")
     private String lastName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "is required")
     @Column(name = "birth_date")
     private Date birthDate;
 
+    @NotEmpty(message = "is required")
     @Column(name = "birth_place")
     private String birthPlace;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "death_date")
     private Date deathDate;
 
