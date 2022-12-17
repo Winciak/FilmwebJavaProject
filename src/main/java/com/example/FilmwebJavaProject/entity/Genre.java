@@ -1,6 +1,7 @@
 package com.example.FilmwebJavaProject.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Table
 @Entity(name = "genre")
@@ -12,6 +13,7 @@ public class Genre {
     private int id;
 
     @Column(name = "name")
+    @NotEmpty(message = "is required")
     private String name;
 
     public Genre() {
@@ -40,9 +42,6 @@ public class Genre {
 
     @Override
     public String toString() {
-        return "Genre{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return name;
     }
 }

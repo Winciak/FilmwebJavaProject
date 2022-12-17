@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Save Movie</title>
+</head>
+
+<body>
+
+<nav th:insert="index.html :: navbar"></nav>
+
+
+<div class="container">
+
+    <h3>Save Movie</h3>
+    <hr>
+
+
+
+    <form th:action="@{/admin/saveMovie}"
+          th:object="${movie}" method="POST">
+
+        <div>
+
+            <!-- Check for edit error -->
+            <div th:if="${editError}" class="alert alert-danger col-xs-offset-1 col-xs-10" style="width : 32.50%">
+                <span th:text="${editError}"></span>
+            </div>
+
+        </div>
+
+
+        <input type="hidden" th:field="*{id}">
+
+    <!-- TITLE  -->
+        <input type="text" th:field="*{title}"
+               class="form-control mb-4" style="width : 32.50%" placeholder="Title here..">
+
+        <div th:if="${#fields.hasErrors('title')}" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('title')}" th:text="'Title - ' + ${err}" />
+            </ul>
+        </div>
+
+
+    <!-- RELEASE DATE -->
+
+        <label for="date-started">Date of release:</label>
+        <input type="date" th:value="*{release_date}" th:field="*{release_date}"
+               class="mb-4" id="date-started"/>
+
+        <div th:if="${#fields.hasErrors('release_date')}" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('release_date')}" th:text="'Releasedate - ' + ${err}" />
+            </ul>
+        </div>
+
+
+    <!-- DESCRIPTION -->
+
+        <textarea class="form-control rounded-0 mb-4" style="width : 65.00%" th:field="*{description}" placeholder="Write your description here..." rows="4"></textarea>
+
+        <div th:if="${#fields.hasErrors('description')}" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('description')}" th:text="'Description - ' + ${err}" />
+            </ul>
+        </div>
+
+
+    <!-- GENRES -->
+
+        <th:block  th:each="genre: ${genreList}">
+            <input type="checkbox"  th:field="*{genres}"
+                   th:text="${genre.name}" th:value="${genre.id}" class="m-2 h4 mb-4" />
+        </th:block>
+
+        <button type="submit" class="btn btn-info col-2">Save</button>
+
+    </form>
+
+    <hr>
+    <a th:href="@{/admin/panel}">Back to Admin Panel</a>
+
+</div>
+</body>
+</html>

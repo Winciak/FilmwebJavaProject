@@ -67,11 +67,6 @@ public class Filmmakers_movies {
 
     @Override
     public String toString() {
-        return "Filmmakers_movies{" +
-                "movie=" + movie +
-                ", filmmaker=" + filmmaker +
-                ", position='" + position + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+        return null;
     }
 }

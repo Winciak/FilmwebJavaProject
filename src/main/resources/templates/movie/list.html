@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <title>List of Movies</title>
+</head>
+
+
+<body>
+
+
+<nav th:insert="index.html :: navbar"></nav>
+
+<div class="container">
+  <h3>List of Movies</h3>
+  <hr>
+
+  <a th:href="@{/admin/movies/showFormForAdd}"
+     class="btn btn-info btn-sm">
+    Add Movie
+  </a>
+
+  <hr>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th class="align-middle">Title</th>
+      <th class="align-middle">Description</th>
+      <th class="align-middle">Release date</th>
+      <th class="align-middle">Genres</th>
+      <th class="align-middle">Rating</th>
+
+
+      <th class="align-middle">Action</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="tempMovie : ${movies}">
+
+      <td class="align-middle" th:text="${tempMovie.title}" />
+      <td class="align-middle" th:text="${tempMovie.description}" />
+      <td class="align-middle" th:text="${#dates.format(tempMovie.release_date, 'yyyy')}" />
+      <td class="align-middle" th:text="${tempMovie.genres}" />
+      <td class="align-middle" th:text="${tempMovie.movie_rating}" />
+
+      <td class="align-middle">
+        <div class="btn-group mb-1">
+
+          <a th:href="@{/admin/movies/showFormForUpdate(movieId=${tempMovie.id})}"
+             class="btn btn-info btn-sm">
+            Update
+          </a>
+
+          <a th:href="@{/admin/movies/delete(movieId=${tempMovie.id})}"
+             class="btn btn-danger btn-sm"
+             th:onclick="if (!(confirm('Are you sure you want to delete this movie: [(${tempMovie.title})] ?'))) return false">
+            Delete
+          </a>
+
+        </div>
+
+        <a th:href="@{/admin/movies/showMovieFilmmakers(movieId=${tempMovie.id})}"
+           class="btn btn-primary btn-sm">
+          Filmmakers
+        </a>
+
+
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+
+
+  <a th:href="@{/admin/panel}">Back to Admin Panel</a>
+
+</div>
+
+<br>
+
+</body>
+</html>

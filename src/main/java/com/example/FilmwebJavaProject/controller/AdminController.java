@@ -1,10 +1,9 @@
 package com.example.FilmwebJavaProject.controller;
 
-
-import com.example.FilmwebJavaProject.entity.Filmmaker;
-import com.example.FilmwebJavaProject.entity.Role;
-import com.example.FilmwebJavaProject.entity.User;
+import com.example.FilmwebJavaProject.entity.*;
 import com.example.FilmwebJavaProject.service.FilmmakerService;
+import com.example.FilmwebJavaProject.service.GenreService;
+import com.example.FilmwebJavaProject.service.MovieService;
 import com.example.FilmwebJavaProject.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +21,16 @@ public class AdminController {
 
     private FilmmakerService filmmakerService;
 
-    public AdminController(UserService userService, FilmmakerService filmmakerService) {
+    private GenreService genreService;
+
+    private MovieService movieService;
+
+
+    public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService, MovieService movieService) {
         this.userService = userService;
         this.filmmakerService = filmmakerService;
+        this.genreService = genreService;
+        this.movieService = movieService;
     }
 
     @GetMapping("/panel")
@@ -120,7 +126,7 @@ public class AdminController {
         filmmakerService.save(filmmaker);
 
 
-        return "redirect:/admin/panel";
+        return "redirect:/admin/filmmakers/list";
     }
 
     @GetMapping("/filmmakers/list")
@@ -140,6 +146,210 @@ public class AdminController {
         filmmakerService.deleteById(id);
 
         return "redirect:/admin/filmmakers/list";
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------GENRE----------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/genres/showFormForAdd")
+    public String showGenreFormForAdd(Model theModel) {
+
+        Genre genre = new Genre();
+
+
+        theModel.addAttribute("genre", genre);
+
+
+        return "/genre/add-form";
+    }
+
+    @GetMapping("/genres/showFormForUpdate")
+    public String showGenreFormForUpdate(@RequestParam("genreId")int id, Model theModel){
+
+        Genre genre = genreService.findById(id);
+
+
+        theModel.addAttribute("genre", genre);
+
+
+        return "/genre/add-form";
+    }
+
+
+    @PostMapping("/saveGenre")
+    public String saveGenre(@Valid @ModelAttribute("genre") Genre genre,
+                                BindingResult theBindingResult,
+                                Model theModel){
+
+
+        if (theBindingResult.hasErrors()){
+
+            return "/genre/add-form";
+        }
+
+        Genre existing = genreService.findGenreByName(genre.getName());
+        if (existing != null ){
+            theModel.addAttribute("editError", genre.getName() + " genre already exists.");
+
+            return "/genre/add-form";
+        }
+
+
+        genreService.save(genre);
+
+
+        return "redirect:/admin/genres/list";
+    }
+
+    @GetMapping("/genres/list")
+    public String listGenres(Model theModel){
+
+        List<Genre> genreList = genreService.findAll();
+
+        theModel.addAttribute("genres", genreList);
+
+        return "/genre/list";
+
+    }
+
+    @GetMapping("/genres/delete")
+    public String deleteGenre(@RequestParam("genreId") int id) {
+
+        genreService.deleteById(id);
+
+        return "redirect:/admin/genres/list";
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------MOVIE----------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/movies/showFormForAdd")
+    public String showMovieFormForAdd(Model theModel) {
+
+        Movie movie = new Movie();
+
+        theModel.addAttribute("movie", movie);
+
+        List<Genre> genreList = genreService.findAll();
+
+        theModel.addAttribute("genreList", genreList);
+
+
+        return "/movie/add-form";
+    }
+
+    @GetMapping("/movies/showFormForUpdate")
+    public String showMovieFormForUpdate(@RequestParam("movieId")int id, Model theModel){
+
+        Movie movie = movieService.findById(id);
+
+        theModel.addAttribute("movie", movie);
+
+        List<Genre> genreList = genreService.findAll();
+
+        theModel.addAttribute("genreList", genreList);
+
+
+        return "/movie/add-form";
+    }
+
+
+    @PostMapping("/saveMovie")
+    public String saveMovie(@Valid @ModelAttribute("movie") Movie movie,
+                            BindingResult theBindingResult,
+                            Model theModel){
+
+        if (theBindingResult.hasErrors()){
+
+            List<Genre> genreList = genreService.findAll();
+
+            theModel.addAttribute("genreList", genreList);
+
+            return "/movie/add-form";
+        }
+
+//        Movie existing = movieService.findMovieByTitle(movie.getTitle());
+//        if (existing != null ){
+//            theModel.addAttribute("editError", movie.getTitle() + " movie already exists.");
+//
+//            List<Genre> genreList = genreService.findAll();
+//
+//            theModel.addAttribute("genreList", genreList);
+//
+//            return "/movie/add-form";
+//        }
+
+        movieService.save(movie);
+
+        return "redirect:/admin/movies/list";
+    }
+
+    @GetMapping("/movies/showMovieFilmmakers")
+    public String showMovieFilmmakers(@RequestParam("movieId")int id, Model theModel){
+
+        Movie movie = movieService.findById(id);
+
+        theModel.addAttribute("movie", movie);
+
+        List<Filmmakers_movies> filmmakers_movies = movieService.findAllFilmmakersByMovieId(id);
+
+        theModel.addAttribute("filmmakers", filmmakers_movies);
+
+        return "/movie/filmmakerList";
+    }
+
+    @GetMapping("/movies/showMovieFilmmakersFormForAdd")
+    public String showMovieFilmmakersFormForAdd(@RequestParam("movieId")int id, Model theModel) {
+
+        Filmmakers_movies filmmakers_movies = new Filmmakers_movies();
+
+        theModel.addAttribute("filmmakers_movies", filmmakers_movies);
+
+        Movie movie = movieService.findById(id);
+
+        theModel.addAttribute("movie", movie);
+
+        List<Filmmaker> filmmakerList = filmmakerService.findAll();
+
+        theModel.addAttribute("filmmakerList", filmmakerList);
+
+
+        return "/movie/add-filmmakerToMovie-form";
+    }
+
+    @PostMapping("/saveFilmmakerToMovie")
+    public String saveFilmmakerToMovie(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies,
+                            BindingResult theBindingResult){
+
+
+        Movie movie = movieService.findById(id);
+
+        filmmakers_movies.setMovie(movie);
+
+        movieService.saveFilmmakersMovies(filmmakers_movies);
+
+        return "redirect:/admin/movies/showMovieFilmmakers?movieId="+movie.getId();
+    }
+
+    @GetMapping("/movies/list")
+    public String listMovies(Model theModel){
+
+        List<Movie> movieList = movieService.findAll();
+
+        theModel.addAttribute("movies", movieList);
+
+        return "movie/list";
+
+    }
+
+    @GetMapping("/movies/delete")
+    public String deleteMovie(@RequestParam("movieId") int id) {
+
+        movieService.deleteById(id);
+
+        return "redirect:/admin/movies/list";
     }
 
 }

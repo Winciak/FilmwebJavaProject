@@ -1,5 +1,7 @@
 package com.example.FilmwebJavaProject.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +21,7 @@ public class Movie {
     @Column(name = "description")
     private String description;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "release_date")
     private Date release_date;
 
