@@ -48,7 +48,14 @@
                 </button>
             </div>
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+
                 <ul class="navbar-nav ms-auto">
+                    <li>
+                        <form th:action="@{/search/(searchTitle=${search.name})}"  th:object="${search}" method="get" class="d-flex justify-content align-items-center">
+                            <input type="text" class="form-control ms-auto me-1" th:field="*{name}" style="width : 62.00%" placeholder="Search for movie here..">
+                            <button type="submit" class="btn btn-info " >Search</button>
+                        </form>
+                    </li>
                     <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
                         <a class="nav-link" th:href="@{/account}"  >
                             <span  aria-hidden="true" sec:authentication="name">Username</span>
@@ -77,12 +84,13 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="mt-5 top-20 start-50 bg-warning text-dark rounded">
             <div class="py-2 px-4 text-center">
+
                 <p class="fs-1 text-uppercase fw-bold">
                     Welcome to Filmwub!
                 </p>
 
-                <a class="nav-link text-decoration-underline fs-3 text-uppercase " th:href="@{/register/showRegistrationPage}">
-                    join us here and start adding every type of information you want
+                <a class="nav-link text-decoration-underline fs-3 text-uppercase mb-3 " th:href="@{/register/showRegistrationPage}">
+                    join us here and start browsing your favourite movies
                 </a>
 
 

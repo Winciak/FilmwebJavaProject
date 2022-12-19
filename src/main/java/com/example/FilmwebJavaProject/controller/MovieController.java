@@ -86,6 +86,8 @@ public class MovieController {
 
         Review review = new Review();
 
+        List<Review> reviewList = movie.getReviews();
+
         if (loggedUser!=null) {
             String login = loggedUser.getUsername();
 
@@ -95,6 +97,7 @@ public class MovieController {
         }
 
         theModel.addAttribute("review", review);
+        theModel.addAttribute("reviewList", reviewList);
 
 
         return "movieSite/movie-page-rated";
@@ -156,6 +159,8 @@ public class MovieController {
 
         Review review = new Review();
 
+        List<Review> reviewList = movie.getReviews();
+
         if (loggedUser!=null) {
             String login = loggedUser.getUsername();
             User user = userService.findByLogin(login);
@@ -172,6 +177,8 @@ public class MovieController {
 
 
         theModel.addAttribute("review", review);
+
+        theModel.addAttribute("reviewList", reviewList);
 
 
         return "movieSite/movie-page";

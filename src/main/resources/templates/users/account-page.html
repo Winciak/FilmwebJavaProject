@@ -32,46 +32,64 @@
 
                             <h2 class="fw-bold mb-3 text-uppercase">Your Account</h2>
 
+                            <div class="row m-auto">
 
+                                <div class="col-3 text-start ms-4">
 
+                                    <!-- Login -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span>Login</span>
+                                    </div>
 
+                                    <!-- Password -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span>Password</span>
+                                    </div>
 
+                                    <!-- First name -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span>First name</span>
+                                    </div>
 
-                                <!-- Login -->
-                                <div class="form-outline form-white mb-3">
-                                    Login: <span sec:authentication="principal.username"></span>
+                                    <!-- Last name -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span>Last name</span>
+                                    </div>
+
+                                    <!-- About -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span>About</span>
+                                    </div>
+
                                 </div>
 
+                                <div class="col-8 text-start">
+                                    <!-- Login -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span sec:authentication="principal.username"></span>
+                                    </div>
 
+                                    <!-- Password -->
+                                    <div class="form-outline form-white mb-3">
+                                       ***********
+                                    </div>
 
-                                <!-- Password -->
-                                <div class="form-outline form-white mb-3">
-                                   Password: ***********
+                                    <!-- First name -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span sec:authentication="principal.firstName"></span>
+                                    </div>
+
+                                    <!-- Last name -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span sec:authentication="principal.lastName"></span>
+                                    </div>
+
+                                    <!-- About -->
+                                    <div class="form-outline form-white mb-3">
+                                        <span sec:authentication="principal.about"></span>
+                                    </div>
                                 </div>
-
-
-
-
-                                <!-- First name -->
-                                <div class="form-outline form-white mb-3">
-                                    First name: <span sec:authentication="principal.firstName"></span>
-                                </div>
-
-
-
-                                <!-- Last name -->
-                                <div class="form-outline form-white mb-3">
-                                    Last name: <span sec:authentication="principal.lastName"></span>
-                                </div>
-
-
-
-                                <!-- About -->
-                                <div class="form-outline form-white mb-3">
-                                    About: <span sec:authentication="principal.about"></span>
-                                </div>
-
-
+                            </div>
 
 
                                 <a class="btn btn-outline-light btn-lg px-5" th:href="@{/account/edit}" >Edit</a>

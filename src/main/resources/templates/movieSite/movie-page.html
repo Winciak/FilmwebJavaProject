@@ -35,6 +35,7 @@
             <div class="container pb-2">
                 <div class="row bg-secondary text-white rounded py-2">
 
+                    <!-- Image -->
                     <div class="col-3">
                         <img src="https://i.ibb.co/WVxBYkF/obraz.png" class="rounded img-fluid" >
                     </div>
@@ -132,19 +133,54 @@
         <hr>
 
 
-            <!-- Actors -->
-        <h4><strong>Cast:</strong></h4>
-            <div th:each="iter : ${actors}">
-                <div class="row form-outline form-white mb-3 h5">
-                    <div class="col-2">
-                    <strong><span th:text="${iter.filmmaker.firstName + ' ' + iter.filmmaker.lastName}">Adam Kowalski</span></strong>
+                <div class="row">
+
+                    <!-- Actors -->
+                    <div class="col">
+
+                        <h4><strong>Cast:</strong></h4>
+                        <div th:each="iter : ${actors}">
+                            <div class="row form-outline form-white mb-3 h5">
+                                <div class="col-4">
+                                    <strong><span th:text="${iter.filmmaker.firstName + ' ' + iter.filmmaker.lastName}">Adam Kowalski</span></strong>
+                                </div>
+
+                                <div class="col">
+                                    <span th:text="${iter.role}"></span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
+                    <!-- Reviews -->
                     <div class="col">
-                        <span th:text="${iter.role}"></span>
+                        <h4><strong>User Reviews:</strong></h4>
+                        <div th:each="review : ${reviewList}">
+                            <div class="row form-outline form-white mb-3 h5">
+                                <div class="col-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+
+                                        <div class="bg-warning p-2 me-2 rounded ">
+                                            <h1 class="display-6 text-white"><strong><span  th:text="${review.rating}">0.0</span></strong></h1>
+                                        </div>
+
+                                        <strong><span th:text="${review.user.firstName + ' ' + review.user.lastName}">Adam Kowalski</span></strong>
+                                    </div>
+
+                                </div>
+
+                                <div class="col">
+                                    <span th:text="${review.text}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
+
+
                 </div>
-            </div>
 
 
 
