@@ -46,7 +46,9 @@
     <tbody>
     <tr th:each="tempMovie : ${movies}">
 
-      <td class="align-middle" th:text="${tempMovie.title}" />
+      <td class="align-middle">
+        <a th:href="@{/movieEdit(movieTitle=${tempMovie.title})}"><span th:text="${tempMovie.title}">Title</span></a>
+      </td>
       <td class="align-middle" th:text="${tempMovie.description}" />
       <td class="align-middle" th:text="${#dates.format(tempMovie.release_date, 'yyyy')}" />
       <td class="align-middle" th:text="${tempMovie.genres}" />

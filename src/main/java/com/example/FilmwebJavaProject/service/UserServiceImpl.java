@@ -1,10 +1,12 @@
 package com.example.FilmwebJavaProject.service;
 
 
+import com.example.FilmwebJavaProject.dao.ReviewRepository;
 import com.example.FilmwebJavaProject.dao.RoleRepository;
 import com.example.FilmwebJavaProject.dao.UserRepository;
 import com.example.FilmwebJavaProject.dto.CustomUserDetails;
 import com.example.FilmwebJavaProject.dto.DtoUser;
+import com.example.FilmwebJavaProject.entity.Review;
 import com.example.FilmwebJavaProject.entity.Role;
 import com.example.FilmwebJavaProject.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,15 @@ public class UserServiceImpl implements UserService {
 
 	private RoleRepository roleRepository;
 
+	private ReviewRepository reviewRepository;
+
 	private final BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository theUserRepository, RoleRepository theRoleRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository theUserRepository, RoleRepository theRoleRepository, ReviewRepository reviewRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
 		userRepository = theUserRepository;
 		roleRepository = theRoleRepository;
+		this.reviewRepository = reviewRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -106,6 +111,16 @@ public class UserServiceImpl implements UserService {
 		user.setAbout(dtoUser.getAbout());
 
 		userRepository.save(user);
+	}
+
+	@Override
+	public void saveReview(Review review) {
+		reviewRepository.save(review);
+	}
+
+	@Override
+	public Review findReviewByUserIdAndMovieId(int userId, int movieId) {
+		return reviewRepository.findReviewByUserIdAndMovieId(userId, movieId);
 	}
 
 

@@ -1,6 +1,7 @@
 package com.example.FilmwebJavaProject.service;
 
 import com.example.FilmwebJavaProject.dto.DtoUser;
+import com.example.FilmwebJavaProject.entity.Review;
 import com.example.FilmwebJavaProject.entity.Role;
 import com.example.FilmwebJavaProject.entity.User;
 
@@ -26,4 +27,8 @@ public interface UserService extends UserDetailsService {
 	void save(DtoUser dtoUser);
 
     void update(DtoUser dtoUser, User user);
+
+	void saveReview(Review review);
+
+	Review findReviewByUserIdAndMovieId(int userId, int movieId);
 }

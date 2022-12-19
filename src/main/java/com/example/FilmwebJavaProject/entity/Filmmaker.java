@@ -54,6 +54,11 @@ public class Filmmaker {
     public Filmmaker() {
     }
 
+    public Filmmaker(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Filmmaker(int id, String firstName, String lastName, Date birthDate, String birthPlace, Date deathDate, String about, List<Filmmakers_movies> filmmakers_movies) {
         this.id = id;
         this.firstName = firstName;

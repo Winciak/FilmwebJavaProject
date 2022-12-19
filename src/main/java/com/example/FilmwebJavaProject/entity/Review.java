@@ -79,12 +79,6 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", rating=" + rating +
-                ", text='" + text + '\'' +
-                ", movie=" + movie +
-                ", user=" + user +
-                '}';
+        return null;
     }
 }
