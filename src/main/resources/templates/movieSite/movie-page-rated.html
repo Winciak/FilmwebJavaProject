@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
     <title th:text="${movie.title}">Account Page</title>
@@ -36,7 +36,7 @@
                 <div class="row bg-secondary text-white rounded py-2">
 
                     <div class="col-3">
-                        <img src="https://i.ibb.co/WVxBYkF/obraz.png" class="rounded img-fluid" >
+                        <img src="https://i.ibb.co/WVxBYkF/obraz.png" class="rounded img-fluid"  alt="img">
                     </div>
 
                     <div class="col-4 h5 mt-1">
@@ -107,8 +107,8 @@
 
 
                             <div class="form-outline form-white mb-3" th:if="${#authorization.expression('isAuthenticated()')}">
-                                    <textarea th:field="${review.text}" th:disabled="true" placeholder="Your review here.."  class="form-control" rows="4"
-                                             resi ></textarea>
+                                    <textarea th:field="${review.text}" th:disabled="true" placeholder="You haven't reviewed this movie yet.."  class="form-control" rows="4"
+                                              ></textarea>
                             </div>
 
                             <div class="buttons px-4 mt-0 d-flex align-items-center justify-content-center">
@@ -148,23 +148,54 @@
 
                 <!-- Reviews -->
                 <div class="col">
-                    <h4><strong>User Reviews:</strong></h4>
-                    <div th:each="review : ${reviewList}">
-                        <div class="row form-outline form-white mb-3 h5">
-                            <div class="col-4">
-                                <div class="d-flex align-items-center justify-content-center">
 
-                                    <div class="bg-warning p-2 me-2 rounded ">
-                                        <h1 class="display-6 text-white"><strong><span  th:text="${review.rating}">0.0</span></strong></h1>
+                    <!-- Critic Reviews -->
+                    <div th:if="${not #lists.isEmpty(criticReviewList)}">
+                        <h4><strong>Critic Reviews:</strong></h4>
+                        <div th:each="review : ${criticReviewList}">
+                            <div class="row bg-primary p-2 me-2 rounded form-outline form-white mb-3 h5" style="--bs-bg-opacity: .85;">
+                                <div class="col-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+
+                                        <div class="bg-warning p-2 me-2 rounded ">
+                                            <h1 class="display-6 text-white"><strong><span th:text="${review.rating}">0.0</span></strong>
+                                            </h1>
+                                        </div>
+
+                                        <strong><span th:text="${review.user.firstName + ' ' + review.user.lastName}">Adam Kowalski</span></strong>
                                     </div>
 
-                                    <strong><span th:text="${review.user.firstName + ' ' + review.user.lastName}">Adam Kowalski</span></strong>
                                 </div>
 
+                                <div class="col">
+                                    <span th:text="${review.text}"></span>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="col">
-                                <span th:text="${review.text}"></span>
+
+                    <!-- User Reviews -->
+                    <div th:if="${not #lists.isEmpty(reviewList)}">
+                        <h4><strong>User Reviews:</strong></h4>
+                        <div th:each="review : ${reviewList}">
+                            <div class="row form-outline form-white mb-3 h5">
+                                <div class="col-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+
+                                        <div class="bg-warning p-2 me-2 rounded ">
+                                            <h1 class="display-6 text-white"><strong><span th:text="${review.rating}">0.0</span></strong>
+                                            </h1>
+                                        </div>
+
+                                        <strong><span th:text="${review.user.firstName + ' ' + review.user.lastName}">Adam Kowalski</span></strong>
+                                    </div>
+
+                                </div>
+
+                                <div class="col">
+                                    <span th:text="${review.text}"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
