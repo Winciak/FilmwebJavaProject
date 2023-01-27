@@ -107,6 +107,14 @@ public class MovieController {
 
         assignReviewsToUsersAndCritics(theModel, movie, review);
 
+        Collection<ImageEntity> images = movie.getImages();
+        ImageEntity imageEntity = new ImageEntity();
+
+        for(ImageEntity image : images){
+            if(image.getName().contains("Main")) imageEntity = image;
+        }
+
+        theModel.addAttribute("image", imageEntity);
 
         return "movieSite/movie-page-rated";
     }
@@ -188,6 +196,15 @@ public class MovieController {
 
 
         assignReviewsToUsersAndCritics(theModel, movie, review);
+
+        Collection<ImageEntity> images = movie.getImages();
+        ImageEntity imageEntity = new ImageEntity();
+
+        for(ImageEntity image : images){
+            if(image.getName().contains("Main")) imageEntity = image;
+        }
+
+        theModel.addAttribute("image", imageEntity);
 
 
         return "movieSite/movie-page";

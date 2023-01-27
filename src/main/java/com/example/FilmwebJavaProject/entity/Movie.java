@@ -196,14 +196,7 @@ public class Movie {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", release_date=" + release_date +
-                ", movie_rating=" + movie_rating +
-                ", reviews=" + reviews +
-                ", images=" + images +
-                ", genres=" + genres +
-                ", rankings=" + rankings +
-                ", filmmakers_movies=" + filmmakers_movies +
+
                 '}';
     }
 }

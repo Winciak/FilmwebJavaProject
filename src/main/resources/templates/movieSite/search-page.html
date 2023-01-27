@@ -40,7 +40,10 @@
             <div class="row py-2 px-1 m-1 border-bottom border-1">
 
                 <div class="col-1">
-                    <a class="nav-link" th:href="@{/movie/(movieTitle=${movie.title})}"><img src="https://i.ibb.co/WVxBYkF/obraz.png" class=" img-fluid"></a>
+                    <a class="nav-link" th:href="@{/movie/(movieTitle=${movie.title})}">
+                        <img th:src="*{movie.images.size() != 0} ? *{movie.images[0].imagePath} : 'no image'" alt="no image" src="https://i.ibb.co/WVxBYkF/obraz.png" class=" img-fluid">
+                    </a>
+
                 </div>
 
                 <div class="col-9 my-auto align-middle">
@@ -54,7 +57,7 @@
                      </div>
 
                      <div class="form-outline form-white mb-2">
-                        <span class="fw-light" th:each="genre : *{movie.filmmakers_movies}" th:text="${genre.filmmaker.firstName + ' ' + genre.filmmaker.lastName + ', '}">Genre</span>
+                        <span class="fw-light" th:each="filmmaker : *{movie.filmmakers_movies}" th:text="${filmmaker.filmmaker.firstName + ' ' + filmmaker.filmmaker.lastName + ', '}">Filmmaker</span>
                      </div>
 
                 </div>
