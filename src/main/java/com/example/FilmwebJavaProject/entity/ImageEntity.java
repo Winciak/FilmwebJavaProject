@@ -1,6 +1,7 @@
 package com.example.FilmwebJavaProject.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "image")
@@ -14,15 +15,25 @@ public class ImageEntity {
     private String name;
 
     @Column(name = "image_path")
-    private String image_path;
+    private String imagePath;
+
+    @ManyToMany(mappedBy = "images")
+    private Collection<Movie> movies;
 
     public ImageEntity() {
     }
 
-    public ImageEntity(Integer id, String name, String image_path) {
+    public ImageEntity(Integer id, String name, String imagePath) {
         this.id = id;
         this.name = name;
-        this.image_path = image_path;
+        this.imagePath = imagePath;
+    }
+
+    public ImageEntity(Integer id, String name, String imagePath, Collection<Movie> movies) {
+        this.id = id;
+        this.name = name;
+        this.imagePath = imagePath;
+        this.movies = movies;
     }
 
     public Integer getId() {
@@ -41,12 +52,20 @@ public class ImageEntity {
         this.name = name;
     }
 
-    public String getImage_path() {
-        return image_path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage_path(String image_path) {
-        this.image_path = image_path;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public Collection<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(Collection<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
@@ -54,7 +73,7 @@ public class ImageEntity {
         return "ImageEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", image_path='" + image_path + '\'' +
+                ", image_path='" + imagePath + '\'' +
                 '}';
     }
 }

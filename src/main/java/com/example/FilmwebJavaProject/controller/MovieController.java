@@ -1,8 +1,6 @@
 package com.example.FilmwebJavaProject.controller;
 
 import com.example.FilmwebJavaProject.entity.*;
-import com.example.FilmwebJavaProject.service.FilmmakerService;
-import com.example.FilmwebJavaProject.service.GenreService;
 import com.example.FilmwebJavaProject.service.MovieService;
 import com.example.FilmwebJavaProject.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,15 +10,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class MovieController {
 
 
-    private MovieService movieService;
+    private final MovieService movieService;
 
-    private UserService userService;
+    private final UserService userService;
 
     private int FLAG_INDEX = -999;
 
@@ -75,6 +76,10 @@ public class MovieController {
             writer = new Filmmaker("Writer", "Skywriter");
         }
 
+        if(director==null){
+            director = new Filmmaker("Director", "Director");
+        }
+
         theModel.addAttribute("movie", movie);
 
         theModel.addAttribute("director", director);
@@ -86,19 +91,30 @@ public class MovieController {
 
         Review review = new Review();
 
-        List<Review> reviewList = movie.getReviews();
-
         if (loggedUser!=null) {
             String login = loggedUser.getUsername();
 
             User user = userService.findByLogin(login);
 
             review = userService.findReviewByUserIdAndMovieId(user.getId(), movie.getId());
+
+            if(review==null){
+                review = new Review();
+                review.setRating(0.0F);
+            }
+
         }
 
-        theModel.addAttribute("review", review);
-        theModel.addAttribute("reviewList", reviewList);
+        assignReviewsToUsersAndCritics(theModel, movie, review);
 
+        Collection<ImageEntity> images = movie.getImages();
+        ImageEntity imageEntity = new ImageEntity();
+
+        for(ImageEntity image : images){
+            if(image.getName().contains("Main")) imageEntity = image;
+        }
+
+        theModel.addAttribute("image", imageEntity);
 
         return "movieSite/movie-page-rated";
     }
@@ -148,6 +164,10 @@ public class MovieController {
             writer = new Filmmaker("Writer", "Skywriter");
         }
 
+        if(director==null){
+            director = new Filmmaker("Director", "Director");
+        }
+
         theModel.addAttribute("movie", movie);
 
         theModel.addAttribute("director", director);
@@ -159,7 +179,6 @@ public class MovieController {
 
         Review review = new Review();
 
-        List<Review> reviewList = movie.getReviews();
 
         if (loggedUser!=null) {
             String login = loggedUser.getUsername();
@@ -176,12 +195,43 @@ public class MovieController {
         }
 
 
-        theModel.addAttribute("review", review);
+        assignReviewsToUsersAndCritics(theModel, movie, review);
 
-        theModel.addAttribute("reviewList", reviewList);
+        Collection<ImageEntity> images = movie.getImages();
+        ImageEntity imageEntity = new ImageEntity();
+
+        for(ImageEntity image : images){
+            if(image.getName().contains("Main")) imageEntity = image;
+        }
+
+        theModel.addAttribute("image", imageEntity);
 
 
         return "movieSite/movie-page";
+    }
+
+    private void assignReviewsToUsersAndCritics(Model theModel, Movie movie, Review review) {
+        theModel.addAttribute("review", review);
+
+        List<Review> reviewList = movie.getReviews();
+        List<Review> criticReviewList = new ArrayList<>();
+
+        for(Review review1 : reviewList){
+
+            Collection<Role> roles = review1.getUser().getRoles();
+
+            for(Role role : roles){
+                if(Objects.equals(role.getName(), "ROLE_CRITIC")){
+                    criticReviewList.add(review1);
+                }
+            }
+        }
+
+        reviewList.removeAll(criticReviewList);
+
+        theModel.addAttribute("reviewList", reviewList);
+
+        theModel.addAttribute("criticReviewList", criticReviewList);
     }
 
 

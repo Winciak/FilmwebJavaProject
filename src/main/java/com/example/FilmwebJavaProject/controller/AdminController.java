@@ -1,6 +1,7 @@
 package com.example.FilmwebJavaProject.controller;
 
 import com.example.FilmwebJavaProject.entity.*;
+import com.example.FilmwebJavaProject.service.*;
 import com.example.FilmwebJavaProject.service.FilmmakerService;
 import com.example.FilmwebJavaProject.service.GenreService;
 import com.example.FilmwebJavaProject.service.RankingService;
@@ -18,23 +19,30 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    private FilmmakerService filmmakerService;
+    private final FilmmakerService filmmakerService;
 
-    private GenreService genreService;
+    private final GenreService genreService;
 
-    private RankingService rankingService;
+    private final RankingService rankingService;
 
-    private MovieService movieService;
+    private final MovieService movieService;
+    private final MovieService movieService;
 
+    private final ImageService imageService;
 
     public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService, MovieService movieService,RankingService rankingService) {
+
+    public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService,
+                           MovieService movieService, ImageService imageService) {
         this.userService = userService;
         this.filmmakerService = filmmakerService;
         this.genreService = genreService;
         this.movieService = movieService;
         this.rankingService = rankingService;
+        this.imageService = imageService;
+
     }
 
     @GetMapping("/panel")
@@ -324,8 +332,7 @@ public class AdminController {
     }
 
     @PostMapping("/saveFilmmakerToMovie")
-    public String saveFilmmakerToMovie(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies,
-                            BindingResult theBindingResult){
+    public String saveFilmmakerToMovie(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies){
 
 
         Movie movie = movieService.findById(id);
@@ -474,6 +481,89 @@ public class AdminController {
         rankingService.deleteById(id);
 
         return "redirect:/admin/rankings/list";
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------IMAGE----------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/images/showFormForAdd")
+    public String showImageFormForAdd(Model theModel) {
+
+        ImageEntity image = new ImageEntity();
+
+        theModel.addAttribute("image", image);
+
+        List<Movie> movies = movieService.findAll();
+
+        theModel.addAttribute("movies", movies);
+
+        return "/image/add-form";
+    }
+
+    @GetMapping("/images/showFormForUpdate")
+    public String showImageFormForUpdate(@RequestParam("imageId")int id, Model theModel){
+
+        ImageEntity image = imageService.findById(id);
+
+        theModel.addAttribute("image", image);
+
+        List<Movie> movies = movieService.findAll();
+
+        theModel.addAttribute("movies", movies);
+
+
+        return "/image/add-form";
+    }
+
+
+    @PostMapping("/saveImage")
+    public String saveImage(@Valid @ModelAttribute("image") ImageEntity image,
+                            BindingResult theBindingResult,
+                            Model theModel){
+
+
+        if (theBindingResult.hasErrors()){
+
+            return "/image/add-form";
+        }
+
+//        ImageEntity existing = imageService.findImageEntityByImage_path(image.getImagePath());
+//        if (existing != null ){
+//            theModel.addAttribute("editError", " image with that link already exists.");
+//
+//            return "/image/add-form";
+//        }
+
+
+        imageService.save(image);
+
+        for (Movie movie : image.getMovies()){
+            movie.getImages().add(image);
+            movieService.save(movie);
+        }
+
+
+        return "redirect:/admin/images/list";
+    }
+
+    @GetMapping("/images/list")
+    public String listImages(Model theModel){
+
+        List<ImageEntity> imageList = imageService.findAll();
+
+        theModel.addAttribute("images", imageList);
+
+        return "/image/list";
+
+    }
+
+    @GetMapping("/images/delete")
+    public String deleteImage(@RequestParam("imageId") int id) {
+
+        imageService.deleteById(id);
+
+        return "redirect:/admin/images/list";
     }
 
 }
