@@ -19,23 +19,22 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
+    private UserService userService;
 
-    private final FilmmakerService filmmakerService;
+    private FilmmakerService filmmakerService;
 
-    private final GenreService genreService;
+    private GenreService genreService;
 
-    private final RankingService rankingService;
+    private  RankingService rankingService;
 
-    private final MovieService movieService;
-    private final MovieService movieService;
+    private  MovieService movieService;
+    //private final MovieService movieService;
 
-    private final ImageService imageService;
+    private  ImageService imageService;
 
-    public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService, MovieService movieService,RankingService rankingService) {
 
     public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService,
-                           MovieService movieService, ImageService imageService) {
+                           MovieService movieService, ImageService imageService,RankingService rankingService) {
         this.userService = userService;
         this.filmmakerService = filmmakerService;
         this.genreService = genreService;
