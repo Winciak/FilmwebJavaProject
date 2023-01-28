@@ -15,9 +15,8 @@ public class Rankings_movies {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "rankingId", referencedColumnName = "id_ranking")
+    @JoinColumn(name = "ranking_Id", referencedColumnName = "id_ranking")
     private Ranking ranking;
-
 
 
     @Column(name = "position")
