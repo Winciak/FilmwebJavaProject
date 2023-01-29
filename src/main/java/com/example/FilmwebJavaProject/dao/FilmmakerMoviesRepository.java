@@ -12,5 +12,8 @@ public interface FilmmakerMoviesRepository extends JpaRepository<Filmmakers_movi
 
     List<Filmmakers_movies> findAllByMovieId(int id);
 
+    Filmmakers_movies findFilmmakers_moviesByMovieIdAndFilmmakerId(int id, int id2);
+
+
 
 }

@@ -69,4 +69,16 @@ public class RankingServiceImpl implements RankingService {
     public void deleteById(int id) {
         rankingRepository.deleteById(id);
     }
+
+    @Override
+    public Rankings_movies findRankings_moviesByRankingIdAndMovieId(int id, int id2) {
+        return rankingMoviesRepository.findRankings_moviesByRankingIdAndMovieId(id,id2);
+    }
+
+    @Override
+    public void delete(Rankings_movies rankings_movies) {
+        rankingMoviesRepository.delete(rankings_movies);
+    }
+
+
 }

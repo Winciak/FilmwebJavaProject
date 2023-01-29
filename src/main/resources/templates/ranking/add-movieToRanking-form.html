@@ -34,7 +34,7 @@
                 <option id="selection" value="">Pick a movie</option>
                 <option th:each="movie : ${movieList}"
                         th:value="${movie.id}"
-                        th:text="${movie.name}">movie
+                        th:text="${movie.title}">movie
                 </option>
 
             </select>
@@ -48,6 +48,16 @@
         <div class="col-sm-4 mb-1">
             Position:
         <select class="form-control" th:field="*{position}">
+            <option id="selection2" value="1">1</option>
+            <option  value="2">2</option>
+            <option  value="3">3</option>
+            <option  value="4">4</option>
+            <option  value="5">5</option>
+            <option  value="6">6</option>
+            <option  value="7">7</option>
+            <option  value="8">8</option>
+            <option  value="9">9</option>
+            <option  value="10">10</option>
 
         </select>
         </div>
@@ -60,7 +70,7 @@
     </form>
 
     <hr>
-    <a th:href="@{/admin/movies/showMovieFilmmakers(movieId=${movie.id})}">Back to Movies List</a>
+    <a th:href="@{/admin/rankings/showMoviesInRanking(rankingId=${ranking.id})}">Back to Ranking List</a>
 
 </div>
 </body>

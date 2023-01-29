@@ -21,7 +21,7 @@
   <h3>List of Movies in <span th:text="${ranking.name}">Ranking</span></h3>
   <hr>
 
-  <a th:href="@{/admin/movies/showMovieFilmmakersFormForAdd(rankingId=${ranking.id})}"
+  <a th:href="@{/admin/rankings/showMoviesInRankingFormForAdd(rankingId=${ranking.id})}"
      class="btn btn-info btn-sm">
     Add Movie to the <span th:text="${ranking.name}">Ranking</span>
   </a>
@@ -52,14 +52,14 @@
       <td class="align-middle">
         <div class="btn-group mb-1">
 
-          <a th:href="@{/admin/showFormForUpdate(rankingId=${tempRankingMovies.ranking.id})}"
+          <a th:href="@{/admin/rankings/showMoviesInRankingFormForUpdate(rankingId=${tempRankingMovies.ranking.id}, movieId=${tempRankingMovies.movie.id})}"
              class="btn btn-info btn-sm">
             Update
           </a>
 
-          <a th:href="@{/admin/rankings/delete(rankingId=${tempRankingMovies.ranking.id})}"
+          <a th:href="@{/admin/rankings/deleteMovieFromRanking(rankingId=${tempRankingMovies.ranking.id}, movieId=${tempRankingMovies.movie.id})}"
              class="btn btn-danger btn-sm"
-             th:onclick="if (!(confirm('Are you sure you want to delete this ranking: [(${tempRankingMovies.ranking.name})] ?'))) return false">
+             th:onclick="if (!(confirm('Are you sure you want to delete movie from ranking: [(${tempRankingMovies.movie.title})] ?'))) return false">
             Delete
           </a>
 

@@ -72,7 +72,17 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public void delete(Filmmakers_movies filmmakers_movies) {
+        filmmakerMoviesRepository.delete(filmmakers_movies);
+    }
+
+    @Override
     public List<Movie> findMoviesByTitleContaining(String search) {
         return movieRepository.findMoviesByTitleContaining(search);
+    }
+
+    @Override
+    public Filmmakers_movies findFilmmakers_moviesByMovieIdAndFilmmakerId(int id, int id2) {
+        return filmmakerMoviesRepository.findFilmmakers_moviesByMovieIdAndFilmmakerId(id, id2);
     }
 }

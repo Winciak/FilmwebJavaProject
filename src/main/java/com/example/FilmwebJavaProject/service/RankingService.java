@@ -12,6 +12,7 @@ import java.util.List;
 public interface RankingService {
 
     List<Rankings_movies> findAllByRankingId(int id);
+
     Ranking findRankingByName(String name);
 
     List<Ranking> findAll();
@@ -23,4 +24,8 @@ public interface RankingService {
     void saveRankingsMovies(Rankings_movies rankings_movies);
 
     void deleteById(int id);
+
+    Rankings_movies findRankings_moviesByRankingIdAndMovieId(int id, int id2);
+
+    void delete(Rankings_movies rankings_movies);
 }

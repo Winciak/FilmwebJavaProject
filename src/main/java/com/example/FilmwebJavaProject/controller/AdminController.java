@@ -281,17 +281,6 @@ public class AdminController {
             return "/movie/add-form";
         }
 
-//        Movie existing = movieService.findMovieByTitle(movie.getTitle());
-//        if (existing != null ){
-//            theModel.addAttribute("editError", movie.getTitle() + " movie already exists.");
-//
-//            List<Genre> genreList = genreService.findAll();
-//
-//            theModel.addAttribute("genreList", genreList);
-//
-//            return "/movie/add-form";
-//        }
-
         movieService.save(movie);
 
         return "redirect:/admin/movies/list";
@@ -330,9 +319,29 @@ public class AdminController {
         return "/movie/add-filmmakerToMovie-form";
     }
 
+    @GetMapping("/movies/showMovieFilmmakersFormForUpdate")
+    public String showMovieFilmmakersFormForUpdate(@RequestParam("movieId")int id,@RequestParam("filmmakerId")int filmmakerId, Model theModel) {
+
+        Filmmakers_movies filmmakers_movies = movieService.findFilmmakers_moviesByMovieIdAndFilmmakerId(id, filmmakerId);
+
+        theModel.addAttribute("filmmakers_movies", filmmakers_movies);
+
+        Movie movie = movieService.findById(id);
+
+        theModel.addAttribute("movie", movie);
+
+        List<Filmmaker> filmmakerList = filmmakerService.findAll();
+
+        theModel.addAttribute("filmmakerList", filmmakerList);
+
+
+        return "/movie/add-filmmakerToMovie-form";
+    }
+
+
+
     @PostMapping("/saveFilmmakerToMovie")
     public String saveFilmmakerToMovie(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies){
-
 
         Movie movie = movieService.findById(id);
 
@@ -342,6 +351,17 @@ public class AdminController {
 
         return "redirect:/admin/movies/showMovieFilmmakers?movieId="+movie.getId();
     }
+
+    @GetMapping("/movies/deleteFilmmakerFromMovie")
+    public String deleteFilmmakerFromMovie(@RequestParam("movieId") int id, @RequestParam("filmmakerId")int filmmakerId) {
+
+        Filmmakers_movies filmmakers_movies = movieService.findFilmmakers_moviesByMovieIdAndFilmmakerId(id, filmmakerId);
+
+        movieService.delete(filmmakers_movies);
+
+        return "redirect:/admin/movies/showMovieFilmmakers?movieId="+id;
+    }
+
 
     @GetMapping("/movies/list")
     public String listMovies(Model theModel){
@@ -361,6 +381,10 @@ public class AdminController {
 
         return "redirect:/admin/movies/list";
     }
+
+
+
+
     //-----------------------------------------------------------------------------------------------------------------
     //--------------------------------------------RANKINGS-------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
@@ -423,9 +447,37 @@ public class AdminController {
         return "/ranking/add-movieToRanking-form";
     }
 
+    @GetMapping("/rankings/showMoviesInRankingFormForUpdate")
+    public String showMoviesInRankingFormForUpdate(@RequestParam("rankingId")int id,@RequestParam("movieId")int movieId, Model theModel) {
+
+        Rankings_movies rankings_movies = rankingService.findRankings_moviesByRankingIdAndMovieId(id, movieId);
+
+        theModel.addAttribute("rankings_movies", rankings_movies);
+
+        Ranking ranking = rankingService.findById(id);
+
+        theModel.addAttribute("ranking", ranking);
+
+        List<Movie> movieList = movieService.findAll();
+
+        theModel.addAttribute("movieList", movieList);
+
+
+        return "/ranking/add-movieToRanking-form";
+    }
+
+    @GetMapping("/rankings/deleteMovieFromRanking")
+    public String deleteMovieFromRanking(@RequestParam("rankingId") int id, @RequestParam("movieId")int movieId) {
+
+        Rankings_movies rankings_movies = rankingService.findRankings_moviesByRankingIdAndMovieId(id, movieId);
+
+        rankingService.delete(rankings_movies);
+
+        return "redirect:/admin/rankings/showMoviesInRanking?rankingId="+id;
+    }
+
     @PostMapping("/saveMovieToRanking")
-    public String saveMovieToRanking(@RequestParam("rankingId")int id, @Valid @ModelAttribute("rankings_movies") Rankings_movies rankings_movies,
-                                       BindingResult theBindingResult){
+    public String saveMovieToRanking(@RequestParam("rankingId")int id, @Valid @ModelAttribute("rankings_movies") Rankings_movies rankings_movies){
 
 
         Ranking ranking = rankingService.findById(id);
@@ -434,7 +486,7 @@ public class AdminController {
 
         rankingService.saveRankingsMovies(rankings_movies);
 
-        return "redirect:/admin/rankings/showRankingMovies?rankingId="+ranking.getId();
+        return "redirect:/admin/rankings/showMoviesInRanking?rankingId="+ranking.getId();
     }
     @PostMapping("/saveRanking")
     public String saveRanking(@Valid @ModelAttribute("ranking") Ranking ranking,
