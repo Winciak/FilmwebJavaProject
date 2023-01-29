@@ -2,36 +2,44 @@ package com.example.FilmwebJavaProject.controller;
 
 import com.example.FilmwebJavaProject.entity.*;
 import com.example.FilmwebJavaProject.service.*;
+import com.example.FilmwebJavaProject.service.FilmmakerService;
+import com.example.FilmwebJavaProject.service.GenreService;
+import com.example.FilmwebJavaProject.service.RankingService;
+import com.example.FilmwebJavaProject.service.MovieService;
+import com.example.FilmwebJavaProject.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
+    private UserService userService;
 
-    private final FilmmakerService filmmakerService;
+    private FilmmakerService filmmakerService;
 
-    private final GenreService genreService;
+    private GenreService genreService;
 
-    private final MovieService movieService;
+    private  RankingService rankingService;
 
-    private final ImageService imageService;
+    private  MovieService movieService;
+    //private final MovieService movieService;
+
+    private  ImageService imageService;
 
 
     public AdminController(UserService userService, FilmmakerService filmmakerService, GenreService genreService,
-                           MovieService movieService, ImageService imageService) {
+                           MovieService movieService, ImageService imageService,RankingService rankingService) {
         this.userService = userService;
         this.filmmakerService = filmmakerService;
         this.genreService = genreService;
         this.movieService = movieService;
+        this.rankingService = rankingService;
         this.imageService = imageService;
 
     }
@@ -273,17 +281,6 @@ public class AdminController {
             return "/movie/add-form";
         }
 
-//        Movie existing = movieService.findMovieByTitle(movie.getTitle());
-//        if (existing != null ){
-//            theModel.addAttribute("editError", movie.getTitle() + " movie already exists.");
-//
-//            List<Genre> genreList = genreService.findAll();
-//
-//            theModel.addAttribute("genreList", genreList);
-//
-//            return "/movie/add-form";
-//        }
-
         movieService.save(movie);
 
         return "redirect:/admin/movies/list";
@@ -322,9 +319,29 @@ public class AdminController {
         return "/movie/add-filmmakerToMovie-form";
     }
 
+    @GetMapping("/movies/showMovieFilmmakersFormForUpdate")
+    public String showMovieFilmmakersFormForUpdate(@RequestParam("movieId")int id,@RequestParam("filmmakerId")int filmmakerId, Model theModel) {
+
+        Filmmakers_movies filmmakers_movies = movieService.findFilmmakers_moviesByMovieIdAndFilmmakerId(id, filmmakerId);
+
+        theModel.addAttribute("filmmakers_movies", filmmakers_movies);
+
+        Movie movie = movieService.findById(id);
+
+        theModel.addAttribute("movie", movie);
+
+        List<Filmmaker> filmmakerList = filmmakerService.findAll();
+
+        theModel.addAttribute("filmmakerList", filmmakerList);
+
+
+        return "/movie/add-filmmakerToMovie-form";
+    }
+
+
+
     @PostMapping("/saveFilmmakerToMovie")
     public String saveFilmmakerToMovie(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies){
-
 
         Movie movie = movieService.findById(id);
 
@@ -334,6 +351,17 @@ public class AdminController {
 
         return "redirect:/admin/movies/showMovieFilmmakers?movieId="+movie.getId();
     }
+
+    @GetMapping("/movies/deleteFilmmakerFromMovie")
+    public String deleteFilmmakerFromMovie(@RequestParam("movieId") int id, @RequestParam("filmmakerId")int filmmakerId) {
+
+        Filmmakers_movies filmmakers_movies = movieService.findFilmmakers_moviesByMovieIdAndFilmmakerId(id, filmmakerId);
+
+        movieService.delete(filmmakers_movies);
+
+        return "redirect:/admin/movies/showMovieFilmmakers?movieId="+id;
+    }
+
 
     @GetMapping("/movies/list")
     public String listMovies(Model theModel){
@@ -352,6 +380,156 @@ public class AdminController {
         movieService.deleteById(id);
 
         return "redirect:/admin/movies/list";
+    }
+
+
+
+
+    //-----------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------RANKINGS-------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/rankings/showFormForAdd")
+    public String showRankingFormForAdd(Model theModel) {
+
+        Ranking ranking = new Ranking();
+
+
+        theModel.addAttribute("ranking", ranking);
+
+
+        return "/ranking/add-form";
+    }
+
+    @GetMapping("/rankings/showFormForUpdate")
+    public String showRankingFormForUpdate(@RequestParam("rankingId")int id, Model theModel){
+
+        Ranking ranking = rankingService.findById(id);
+
+
+        theModel.addAttribute("ranking", ranking);
+
+
+        return "/ranking/add-form";
+    }
+
+
+    @GetMapping("/rankings/showMoviesInRanking")
+    public String showMoviesInRanking(@RequestParam("rankingId")int id, Model theModel){
+
+        Ranking ranking = rankingService.findById(id);
+
+        theModel.addAttribute("ranking", ranking);
+
+        List<Rankings_movies> ranking_movies = rankingService.findAllByRankingId(id);
+
+        theModel.addAttribute("movies", ranking_movies);
+
+        return "/ranking/movieList";
+    }
+
+    @GetMapping("/rankings/showMoviesInRankingFormForAdd")
+    public String showMoviesInRankingFormForAdd(@RequestParam("rankingId")int id, Model theModel) {
+
+        Rankings_movies rankings_movies = new Rankings_movies();
+
+        theModel.addAttribute("rankings_movies", rankings_movies);
+
+        Ranking ranking = rankingService.findById(id);
+
+        theModel.addAttribute("ranking", ranking);
+
+        List<Movie> movieList = movieService.findAll();
+
+        theModel.addAttribute("movieList", movieList);
+
+
+        return "/ranking/add-movieToRanking-form";
+    }
+
+    @GetMapping("/rankings/showMoviesInRankingFormForUpdate")
+    public String showMoviesInRankingFormForUpdate(@RequestParam("rankingId")int id,@RequestParam("movieId")int movieId, Model theModel) {
+
+        Rankings_movies rankings_movies = rankingService.findRankings_moviesByRankingIdAndMovieId(id, movieId);
+
+        theModel.addAttribute("rankings_movies", rankings_movies);
+
+        Ranking ranking = rankingService.findById(id);
+
+        theModel.addAttribute("ranking", ranking);
+
+        List<Movie> movieList = movieService.findAll();
+
+        theModel.addAttribute("movieList", movieList);
+
+
+        return "/ranking/add-movieToRanking-form";
+    }
+
+    @GetMapping("/rankings/deleteMovieFromRanking")
+    public String deleteMovieFromRanking(@RequestParam("rankingId") int id, @RequestParam("movieId")int movieId) {
+
+        Rankings_movies rankings_movies = rankingService.findRankings_moviesByRankingIdAndMovieId(id, movieId);
+
+        rankingService.delete(rankings_movies);
+
+        return "redirect:/admin/rankings/showMoviesInRanking?rankingId="+id;
+    }
+
+    @PostMapping("/saveMovieToRanking")
+    public String saveMovieToRanking(@RequestParam("rankingId")int id, @Valid @ModelAttribute("rankings_movies") Rankings_movies rankings_movies){
+
+
+        Ranking ranking = rankingService.findById(id);
+
+        rankings_movies.setRanking(ranking);
+
+        rankingService.saveRankingsMovies(rankings_movies);
+
+        return "redirect:/admin/rankings/showMoviesInRanking?rankingId="+ranking.getId();
+    }
+    @PostMapping("/saveRanking")
+    public String saveRanking(@Valid @ModelAttribute("ranking") Ranking ranking,
+                            BindingResult theBindingResult,
+                            Model theModel){
+
+
+        if (theBindingResult.hasErrors()){
+
+            return "/ranking/add-form";
+        }
+
+        Ranking existing = rankingService.findRankingByName(ranking.getName());
+        if (existing != null ){
+            theModel.addAttribute("editError", ranking.getName() + " ranking already exists.");
+
+            return "/ranking/add-form";
+        }
+
+
+        rankingService.save(ranking);
+
+
+        return "redirect:/admin/rankings/list";
+    }
+
+    @GetMapping("/rankings/list")
+    public String listRankings(Model theModel){
+
+        List<Ranking> rankingList = rankingService.findAll();
+
+        theModel.addAttribute("rankings", rankingList);
+
+        return "/ranking/list";
+
+    }
+
+    @GetMapping("/rankings/delete")
+    public String deleteRanking(@RequestParam("rankingId") int id) {
+
+        rankingService.deleteById(id);
+
+        return "redirect:/admin/rankings/list";
     }
 
     //-----------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 package com.example.FilmwebJavaProject.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "ranking")
@@ -14,12 +15,21 @@ public class Ranking {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "ranking")
+    private List<Rankings_movies> rankings_moviesList;
+
     public Ranking() {
     }
 
     public Ranking(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Ranking(int id, String name, List<Rankings_movies> rankings_moviesList) {
+        this.id = id;
+        this.name = name;
+        this.rankings_moviesList = rankings_moviesList;
     }
 
     public int getId() {
@@ -36,6 +46,14 @@ public class Ranking {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Rankings_movies> getRankings_moviesList() {
+        return rankings_moviesList;
+    }
+
+    public void setRankings_moviesList(List<Rankings_movies> rankings_moviesList) {
+        this.rankings_moviesList = rankings_moviesList;
     }
 
     @Override

@@ -22,6 +22,10 @@ public interface MovieService {
 
     void deleteById(int id);
 
+    void delete(Filmmakers_movies filmmakers_movies);
+
     List<Movie> findMoviesByTitleContaining(String search);
+
+    Filmmakers_movies findFilmmakers_moviesByMovieIdAndFilmmakerId(int id, int id2);
 
 }
