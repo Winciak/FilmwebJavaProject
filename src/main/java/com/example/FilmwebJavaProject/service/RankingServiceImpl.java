@@ -30,7 +30,7 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public List<Rankings_movies> findAllByRankingId(int id) {
-        return rankingMoviesRepository.findAllByRankingId(id);
+        return rankingMoviesRepository.findAllMoviesByRankingId(id);
     }
 
     @Override
