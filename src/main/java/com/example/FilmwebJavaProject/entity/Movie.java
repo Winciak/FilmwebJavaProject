@@ -29,7 +29,7 @@ public class Movie {
     private float movie_rating;
 
     @OneToMany(mappedBy = "movie",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+            cascade = { })
     private List<Review> reviews;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

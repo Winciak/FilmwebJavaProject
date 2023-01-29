@@ -31,4 +31,7 @@ public interface UserService extends UserDetailsService {
 	void saveReview(Review review);
 
 	Review findReviewByUserIdAndMovieId(int userId, int movieId);
+
+	void deleteReviewById(int theId);
+
 }

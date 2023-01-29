@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import sun.security.x509.GeneralName;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -377,6 +379,48 @@ public class AdminController {
     @GetMapping("/movies/delete")
     public String deleteMovie(@RequestParam("movieId") int id) {
 
+        Movie movie = movieService.findById(id);
+
+        List<Filmmakers_movies> filmmakers_movies = movie.getFilmmakers_movies();
+
+        List<Review> reviewList = movie.getReviews();
+
+        List<ImageEntity> imageEntityList = (List<ImageEntity>) movie.getImages();
+
+        List<Ranking> rankings = (List<Ranking>) movie.getRankings();
+
+        List<Genre> genres = (List<Genre>) movie.getGenres();
+
+        for(Filmmakers_movies filmmakersMovies : filmmakers_movies){
+            movieService.delete(filmmakersMovies);
+        }
+
+        movie.setFilmmakers_movies(new ArrayList<>());
+
+        for(Review review : reviewList){
+            userService.deleteReviewById(review.getId());
+        }
+
+        movie.setReviews(new ArrayList<>());
+
+        for(ImageEntity image : imageEntityList){
+            image.getMovies().remove(movie);
+            imageService.save(image);
+        }
+
+        movie.setImages(new ArrayList<>());
+
+        for(Ranking ranking : rankings){
+           Rankings_movies rankings_movies = rankingService.findRankings_moviesByRankingIdAndMovieId(ranking.getId(),movie.getId());
+           rankingService.delete(rankings_movies);
+        }
+
+        movie.setRankings(new ArrayList<>());
+        movie.setGenres(new ArrayList<>());
+
+        movieService.save(movie);
+
+
         movieService.deleteById(id);
 
         return "redirect:/admin/movies/list";
@@ -388,6 +432,8 @@ public class AdminController {
     //-----------------------------------------------------------------------------------------------------------------
     //--------------------------------------------RANKINGS-------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
+
+
 
     @GetMapping("/rankings/showFormForAdd")
     public String showRankingFormForAdd(Model theModel) {
@@ -527,6 +573,12 @@ public class AdminController {
     @GetMapping("/rankings/delete")
     public String deleteRanking(@RequestParam("rankingId") int id) {
 
+        Ranking ranking = rankingService.findById(id);
+
+        for(Rankings_movies rankings_movies : ranking.getRankings_moviesList()){
+            rankingService.delete(rankings_movies);
+        }
+
         rankingService.deleteById(id);
 
         return "redirect:/admin/rankings/list";
@@ -609,6 +661,17 @@ public class AdminController {
 
     @GetMapping("/images/delete")
     public String deleteImage(@RequestParam("imageId") int id) {
+
+        ImageEntity image = imageService.findById(id);
+
+        List<Movie> movieList = (List<Movie>) image.getMovies();
+
+        for(Movie movie : movieList){
+            movie.getImages().remove(image);
+            movieService.save(movie);
+        }
+
+        image.setMovies(new ArrayList<>());
 
         imageService.deleteById(id);
 

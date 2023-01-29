@@ -123,6 +123,11 @@ public class UserServiceImpl implements UserService {
 		return reviewRepository.findReviewByUserIdAndMovieId(userId, movieId);
 	}
 
+	@Override
+	public void deleteReviewById(int theId) {
+		reviewRepository.deleteById(theId);
+	}
+
 
 	@Override
 	@Transactional
