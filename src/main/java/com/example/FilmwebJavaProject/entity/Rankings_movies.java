@@ -18,7 +18,6 @@ public class Rankings_movies {
     @JoinColumn(name = "ranking_Id", referencedColumnName = "id_ranking")
     private Ranking ranking;
 
-
     @Column(name = "position")
     private int position;
 

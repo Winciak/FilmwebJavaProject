@@ -2,7 +2,6 @@ package com.example.FilmwebJavaProject.service;
 
 import com.example.FilmwebJavaProject.dao.RankingMoviesRepository;
 import com.example.FilmwebJavaProject.dao.RankingRepository;
-import com.example.FilmwebJavaProject.entity.Filmmakers_movies;
 import com.example.FilmwebJavaProject.entity.Ranking;
 import com.example.FilmwebJavaProject.entity.Rankings_movies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,9 @@ public class RankingServiceImpl implements RankingService {
     private RankingMoviesRepository rankingMoviesRepository;
 
     @Autowired
-    public RankingServiceImpl(RankingRepository rankingRepository) {
+    public RankingServiceImpl(RankingRepository rankingRepository, RankingMoviesRepository rankingMoviesRepository) {
         this.rankingRepository = rankingRepository;
+        this.rankingMoviesRepository = rankingMoviesRepository;
     }
 
     @Override

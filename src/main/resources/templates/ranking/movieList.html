@@ -42,10 +42,10 @@
     </thead>
 
     <tbody>
-    <tr th:each="tempRankingMovies : ${movie}">
+    <tr th:each="tempRankingMovies : ${movies}">
 
 
-      <td class="align-middle" th:text="${tempRankingMovies.movie.tittle}" />
+      <td class="align-middle" th:text="${tempRankingMovies.movie.title}" />
       <td class="align-middle" th:text="${tempRankingMovies.position}" />
 
 
@@ -73,7 +73,7 @@
   </table>
 
 
-  <a th:href="@{/admin/ranking/list}">Back to Rankings List</a>
+  <a th:href="@{/admin/rankings/list}">Back to Rankings List</a>
 
 </div>
 
