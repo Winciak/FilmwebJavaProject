@@ -390,7 +390,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/rankings/showRankingMovies")
+    @GetMapping("/rankings/showMoviesInRanking")
     public String showMoviesInRanking(@RequestParam("rankingId")int id, Model theModel){
 
         Ranking ranking = rankingService.findById(id);
@@ -401,7 +401,7 @@ public class AdminController {
 
         theModel.addAttribute("movies", ranking_movies);
 
-        return "/ranking/moviesList";
+        return "/ranking/movieList";
     }
 
     @GetMapping("/rankings/showMoviesInRankingFormForAdd")

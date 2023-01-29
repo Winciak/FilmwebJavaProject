@@ -21,7 +21,7 @@
   <h3>List of Movies in <span th:text="${ranking.name}">Ranking</span></h3>
   <hr>
 
-  <a th:href="@{/admin/movies/showMovieFilmmakersFormForAdd(movieId=${movie.id})}"
+  <a th:href="@{/admin/movies/showMovieFilmmakersFormForAdd(rankingId=${ranking.id})}"
      class="btn btn-info btn-sm">
     Add Movie to the <span th:text="${ranking.name}">Ranking</span>
   </a>
