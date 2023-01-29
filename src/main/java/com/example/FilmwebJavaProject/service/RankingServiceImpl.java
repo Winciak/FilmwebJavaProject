@@ -61,6 +61,11 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
+    public void saveRankingsMovies(Rankings_movies rankings_movies) {
+        rankingMoviesRepository.save(rankings_movies);
+    }
+
+    @Override
     public void deleteById(int id) {
         rankingRepository.deleteById(id);
     }

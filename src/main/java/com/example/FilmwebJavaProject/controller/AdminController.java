@@ -389,54 +389,52 @@ public class AdminController {
         return "/ranking/add-form";
     }
 
-    //showMoviesInRanking
 
+    @GetMapping("/rankings/showRankingMovies")
+    public String showMoviesInRanking(@RequestParam("rankingId")int id, Model theModel){
 
-    @GetMapping("/rankings/showMovieFilmmakers")
-    public String showMoviesInRanking(@RequestParam("movieId")int id, Model theModel){
+        Ranking ranking = rankingService.findById(id);
 
-        Movie movie = movieService.findById(id);
+        theModel.addAttribute("ranking", ranking);
 
-        theModel.addAttribute("movie", movie);
+        List<Rankings_movies> ranking_movies = rankingService.findAllByRankingId(id);
 
-        List<Filmmakers_movies> filmmakers_movies = movieService.findAllFilmmakersByMovieId(id);
+        theModel.addAttribute("movies", ranking_movies);
 
-        theModel.addAttribute("filmmakers", filmmakers_movies);
-
-        return "/movie/filmmakerList";
+        return "/ranking/moviesList";
     }
 
     @GetMapping("/rankings/showMoviesInRankingFormForAdd")
     public String showMoviesInRankingFormForAdd(@RequestParam("rankingId")int id, Model theModel) {
 
-        Filmmakers_movies filmmakers_movies = new Filmmakers_movies();
+        Rankings_movies rankings_movies = new Rankings_movies();
 
-        theModel.addAttribute("filmmakers_movies", filmmakers_movies);
+        theModel.addAttribute("rankings_movies", rankings_movies);
 
-        Movie movie = movieService.findById(id);
+        Ranking ranking = rankingService.findById(id);
 
-        theModel.addAttribute("movie", movie);
+        theModel.addAttribute("ranking", ranking);
 
-        List<Filmmaker> filmmakerList = filmmakerService.findAll();
+        List<Movie> movieList = movieService.findAll();
 
-        theModel.addAttribute("filmmakerList", filmmakerList);
+        theModel.addAttribute("movieList", movieList);
 
 
-        return "/movie/add-filmmakerToMovie-form";
+        return "/ranking/add-movieToRanking-form";
     }
 
     @PostMapping("/saveMovieToRanking")
-    public String saveMovieToRanking(@RequestParam("movieId")int id, @Valid @ModelAttribute("filmmakers_movies") Filmmakers_movies filmmakers_movies,
+    public String saveMovieToRanking(@RequestParam("rankingId")int id, @Valid @ModelAttribute("rankings_movies") Rankings_movies rankings_movies,
                                        BindingResult theBindingResult){
 
 
-        Movie movie = movieService.findById(id);
+        Ranking ranking = rankingService.findById(id);
 
-        filmmakers_movies.setMovie(movie);
+        rankings_movies.setRanking(ranking);
 
-        movieService.saveFilmmakersMovies(filmmakers_movies);
+        rankingService.saveRankingsMovies(rankings_movies);
 
-        return "redirect:/admin/rankings/showMovieFilmmakers?movieId="+movie.getId();
+        return "redirect:/admin/rankings/showRankingMovies?rankingId="+ranking.getId();
     }
     @PostMapping("/saveRanking")
     public String saveRanking(@Valid @ModelAttribute("ranking") Ranking ranking,
